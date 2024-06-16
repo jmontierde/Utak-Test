@@ -51,14 +51,12 @@ const MenuList: React.FC = () => {
     );
     setMenuItems(updatedItems);
 
-    // Update Firebase database
     await set(ref(database, `menuItems/${newRow.id}`), newRow);
     return newRow;
   };
 
-  // Adjust column widths to take up full screen
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
+    { field: "index", headerName: "Index", flex: 1 },
     { field: "category", headerName: "Category", flex: 1, editable: true },
     { field: "name", headerName: "Name", flex: 1, editable: true },
     { field: "options", headerName: "Options", flex: 1, editable: true },
@@ -66,21 +64,21 @@ const MenuList: React.FC = () => {
       field: "price",
       headerName: "Price",
       type: "number",
-      // width: 100,
+      flex: 1,
       editable: true,
     },
     {
       field: "cost",
       headerName: "Cost",
       type: "number",
-      // width: 100,
+      flex: 1,
       editable: true,
     },
     {
       field: "stock",
       headerName: "Stock",
       type: "number",
-      // width: 100,
+      flex: 1,
       editable: true,
     },
     {
@@ -100,18 +98,29 @@ const MenuList: React.FC = () => {
             Save
           </Button>
         ) : (
-          <div>
+          <div className="space-x-3">
             <Button
-              variant="contained"
-              color="primary"
+              sx={{
+                color: "#ffffff", // Text color
+                backgroundColor: "#25AE9C", // Background color
+                "&:hover": {
+                  backgroundColor: "#17a2b8", // Hover background color
+                },
+              }}
               onClick={() => handleEditClick(params.id)}
-              style={{ marginRight: 10 }}
             >
               Edit
             </Button>
             <Button
               variant="contained"
               color="secondary"
+              sx={{
+                color: "#ffffff", // Text color
+                backgroundColor: "#AD2437", // Background color
+                "&:hover": {
+                  backgroundColor: "#A20000", // Hover background color
+                },
+              }}
               onClick={() => handleDelete(params.row.id)}
             >
               Delete
@@ -122,15 +131,17 @@ const MenuList: React.FC = () => {
     },
   ];
 
-  const rows = menuItems.map((item) => ({
+  const rows = menuItems.map((item, index) => ({
     ...item,
+    index: index + 1,
     options: Array.isArray(item.options)
       ? item.options.join(", ")
       : item.options || "None",
   }));
 
   return (
-    <div className="h-auto w-full p-6">
+    <div style={{ height: 400, width: "100%" }}>
+      <h2 className="text-lg font-semibold">Items</h2>
       <DataGrid
         rows={rows}
         columns={columns}

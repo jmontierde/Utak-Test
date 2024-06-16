@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { MenuItem } from "../types/menu";
 import { database } from "../firebaseConfig.ts";
 import { ref, set, push } from "firebase/database";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 interface Props {
   item?: MenuItem;
   onSave: () => void;
@@ -36,17 +40,17 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
       } else {
         await push(ref(database, "menuItems"), menuItem);
       }
-      setMenuItem(initialState); // Reset the form to initial state
+      toast.success("Menu item saved successfully!");
+      setMenuItem(initialState);
       onSave();
     } catch (error) {
       console.error("Error saving menu item:", error);
-      // Handle error (e.g., show error message to user)
     }
   };
 
   return (
     <div className="py-4  rounded">
-      <div className="grid grid-cols-3 space-x-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-x-6">
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Category
@@ -73,7 +77,7 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
-            Options (comma separated)
+            Options
           </label>
           <input
             type="text"
@@ -85,7 +89,7 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 space-x-6 ">
+      <div className="grid grid-cols-1 lg:grid-cols-4 lg:space-x-6 ">
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Price
@@ -131,6 +135,7 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

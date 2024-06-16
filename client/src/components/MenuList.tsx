@@ -10,7 +10,8 @@ import {
   GridRowId,
 } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const MenuList: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -30,7 +31,13 @@ const MenuList: React.FC = () => {
   }, []);
 
   const handleDelete = async (id: string) => {
-    await remove(ref(database, `menuItems/${id}`));
+    try {
+      await remove(ref(database, `menuItems/${id}`));
+      toast.success("Menu item deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting menu item:", error);
+      toast.error("Failed to delete menu item.");
+    }
   };
 
   const handleEditClick = (id: GridRowId) => {
@@ -46,45 +53,74 @@ const MenuList: React.FC = () => {
   };
 
   const processRowUpdate = async (newRow: MenuItem) => {
-    const updatedItems = menuItems.map((item) =>
-      item.id === newRow.id ? { ...item, ...newRow } : item
-    );
-    setMenuItems(updatedItems);
+    try {
+      const updatedItems = menuItems.map((item) =>
+        item.id === newRow.id ? { ...item, ...newRow } : item
+      );
+      setMenuItems(updatedItems);
 
-    await set(ref(database, `menuItems/${newRow.id}`), newRow);
-    return newRow;
+      await set(ref(database, `menuItems/${newRow.id}`), newRow);
+      toast.success("Menu item updated successfully!");
+      return newRow;
+    } catch (error) {
+      console.error("Error updating menu item:", error);
+      toast.error("Failed to update menu item.");
+      throw error;
+    }
   };
 
   const columns: GridColDef[] = [
-    { field: "index", headerName: "Index", flex: 1 },
-    { field: "category", headerName: "Category", flex: 1, editable: true },
-    { field: "name", headerName: "Name", flex: 1, editable: true },
-    { field: "options", headerName: "Options", flex: 1, editable: true },
+    { field: "index", headerName: "Index", width: 120, headerAlign: "center" },
+    {
+      field: "category",
+      headerName: "Category",
+      width: 170,
+      editable: true,
+      headerAlign: "center",
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 170,
+      editable: true,
+      headerAlign: "center",
+    },
+    {
+      field: "options",
+      headerName: "Options",
+      width: 170,
+      editable: true,
+      headerAlign: "center",
+    },
     {
       field: "price",
       headerName: "Price",
       type: "number",
-      flex: 1,
+      width: 170,
       editable: true,
+      headerAlign: "center",
     },
     {
       field: "cost",
       headerName: "Cost",
       type: "number",
-      flex: 1,
+      width: 170,
       editable: true,
+      headerAlign: "center",
     },
     {
       field: "stock",
       headerName: "Stock",
       type: "number",
-      flex: 1,
+      width: 170,
       editable: true,
+      headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1,
+      width: 170,
+      headerAlign: "center",
       renderCell: (params) => {
         const isInEditMode =
           rowModesModel[params.id]?.mode === GridRowModes.Edit;
@@ -98,7 +134,7 @@ const MenuList: React.FC = () => {
             Save
           </Button>
         ) : (
-          <div className="space-x-3">
+          <div className="space-x-3 flex">
             <Button
               sx={{
                 color: "#ffffff", // Text color
@@ -140,8 +176,8 @@ const MenuList: React.FC = () => {
   }));
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <h2 className="text-lg font-semibold">Items</h2>
+    <div className="h-auto w-full space-y-6">
+      <h2 className="text-xl font-semibold">Items</h2>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -154,7 +190,30 @@ const MenuList: React.FC = () => {
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+        getRowHeight={() => "auto"}
+        sx={{
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center", // Center text in cells
+            whiteSpace: "normal",
+            wordWrap: "break-word",
+            padding: "8px", // Add padding for better spacing
+            lineHeight: "1.5em",
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            textAlign: "center", // Center text in headers
+            whiteSpace: "normal",
+            wordWrap: "break-word",
+          },
+          "@media (max-width: 600px)": {
+            "& .MuiDataGrid-root": {
+              fontSize: "12px",
+            },
+          },
+        }}
       />
+      <ToastContainer />
     </div>
   );
 };

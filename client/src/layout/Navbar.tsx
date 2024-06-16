@@ -1,9 +1,7 @@
-import React from "react";
-
 const Navbar = () => {
   return (
     <div>
-      <nav className="font-bold">UTAK</nav>
+      <nav className="font-bold">UTAK React Developer Test</nav>
     </div>
   );
 };

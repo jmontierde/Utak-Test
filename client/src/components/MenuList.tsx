@@ -10,8 +10,9 @@ import {
   GridRowId,
 } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 const MenuList: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -213,7 +214,6 @@ const MenuList: React.FC = () => {
           },
         }}
       />
-      <ToastContainer />
     </div>
   );
 };

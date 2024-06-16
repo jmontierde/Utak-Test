@@ -3,6 +3,8 @@ import MenuItemForm from "./components/MenuItemForm";
 import { MenuItem } from "./types/menu";
 import MenuList from "./components/MenuList";
 import Navbar from "./layout/Navbar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App: React.FC = () => {
   const [currentItem, setCurrentItem] = useState<MenuItem | null>(null);
@@ -22,6 +24,7 @@ const App: React.FC = () => {
         <MenuItemForm item={currentItem || undefined} onSave={handleSave} />
         <MenuList />
       </div>
+      <ToastContainer />
     </div>
   );
 };

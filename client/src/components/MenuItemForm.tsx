@@ -3,8 +3,7 @@ import { MenuItem } from "../types/menu";
 import { database } from "../firebaseConfig.ts";
 import { ref, set, push } from "firebase/database";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 interface Props {
   item?: MenuItem;
@@ -40,9 +39,9 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
       } else {
         await push(ref(database, "menuItems"), menuItem);
       }
-      toast.success("Menu item saved successfully!");
       setMenuItem(initialState);
       onSave();
+      toast.success("Menu item saved successfully!");
     } catch (error) {
       console.error("Error saving menu item:", error);
     }
@@ -135,7 +134,6 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
           </button>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

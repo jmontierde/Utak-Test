@@ -1,8 +1,8 @@
 export interface MenuItem {
-  id?: string;
+  id?: string | undefined;
   category: string;
   name: string;
-  options?: string[];
+  options?: string[] | string;
   price: number;
   cost: number;
   stock: number;

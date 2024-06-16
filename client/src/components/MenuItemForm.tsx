@@ -24,10 +24,17 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setMenuItem({
-      ...menuItem,
-      [name]: name === "options" ? value.split(",") : value,
-    });
+    if (name === "options") {
+      setMenuItem({
+        ...menuItem,
+        [name]: value.split(",").map((option) => option.trim()),
+      });
+    } else {
+      setMenuItem({
+        ...menuItem,
+        [name]: value,
+      });
+    }
   };
 
   const handleSave = async () => {
@@ -65,12 +72,12 @@ const MenuItemForm: React.FC<Props> = ({ item, onSave }) => {
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Options (comma separated)
+          Options
         </label>
         <input
           type="text"
           name="options"
-          value={menuItem.options?.join(",") || ""}
+          value={menuItem.options}
           onChange={handleChange}
           className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm"
         />
